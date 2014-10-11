@@ -2,13 +2,18 @@
 <html>
 	<head>
 		<script src="countdownClock.js"></script>
+		<h1 id="target-holder">Target Date</h1>
 		<h2 id="countdown-holder">Test</h2>
 		<script>
-			var clock = document.getElementById("countdown-holder");
 			var c = new Counter();
+			var target = document.getElementById("target-holder")
+			var clock = document.getElementById("countdown-holder");
+
+			target.innerHTML = "Countdown to " + formatDate(c.target);
 			clock.innerHTML = c.print();
 			setInterval(function() {
 				c = new Counter();
+				target.innerHTML = "Countdown to " + formatDate(c.target);
 				clock.innerHTML = c.print();
 			}, 1);
 		</script>
