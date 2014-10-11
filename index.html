@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="countdownClock.js"></script>
+		<h2 id="countdown-holder">Test</h2>
+		<script>
+			var clock = document.getElementById("countdown-holder");
+			var c = new Counter();
+			clock.innerHTML = c.print();
+			setInterval(function() {
+				c = new Counter();
+				clock.innerHTML = c.print();
+			}, 1);
+		</script>
+	</head>
+</html>
