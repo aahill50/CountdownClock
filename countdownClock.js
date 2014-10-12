@@ -1,7 +1,7 @@
 var TARGETTIME = new Date(2014,10,3);
 var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-var MONTHS = ["January", "February", "March", "April", "May", "June", 
-							"July", "August", "September", "October", "November", "December"];
+var MONTHS = ["January", "February", "March", "April", "May", "June", "July"
+						 ,"August", "September", "October", "November", "December"];
 var INFLECTORS = ["th","st","nd","rd"];
 
 var Counter = function() {
@@ -67,7 +67,12 @@ var	formatDate = function(dateToFormat) {
 	var dayNum = dateToFormat.getDate() ;
 	var year = dateToFormat.getFullYear();
 
-	var inflector = INFLECTORS[dayNum % 10] || INFLECTORS[0];
+	var inflector = (function() {if (dayNum >= 10 && dayNum < 20) {
+				return INFLECTORS[0];
+			} else {
+				return INFLECTORS[dayNum % 10] || INFLECTORS[0];
+			}
+		}());
 
 	dayNum = dayNum + inflector; 
 
