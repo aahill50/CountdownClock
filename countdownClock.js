@@ -1,14 +1,18 @@
 var TARGETTIME = new Date(2014,10,3);
+var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+var MONTHS = ["January", "February", "March", "April", "May", "June", 
+							"July", "August", "September", "October", "November", "December"];
+var INFLECTORS = ["th","st","nd","rd"];
 
 var Counter = function() {
-	this.msLeft = TARGETTIME.getTime() - currentDateAndTime().getTime();
-	this.deciSecsLeft = 0;
-	this.secsLeft = 0;
-	this.minsLeft = 0;
-	this.hoursLeft = 0;
-	this.daysLeft = 0;
-	this.monthsLeft = 0;
-	this.target = TARGETTIME;
+	this.msLeft 			= TARGETTIME.getTime() - currentDateAndTime().getTime();
+	this.deciSecsLeft = null;
+	this.secsLeft 		= null;
+	this.minsLeft 		= null;
+	this.hoursLeft 		= null;
+	this.daysLeft 		= null;
+	this.monthsLeft		= null;
+	this.target 			= TARGETTIME;
 
 	this.convert();
 };
@@ -16,28 +20,28 @@ var Counter = function() {
 Counter.prototype.convert = function() {
 
 	this.deciSecsLeft += Math.floor(this.msLeft / 10);
-	this.secsLeft += Math.floor(this.deciSecsLeft / 100);
-	this.minsLeft += Math.floor(this.secsLeft / 60);
-	this.hoursLeft += Math.floor(this.minsLeft / 60);
-	this.daysLeft += Math.floor(this.hoursLeft / 24);
-	this.monthsLeft += Math.floor(this.daysLeft / 30);
+	this.secsLeft		  += Math.floor(this.deciSecsLeft / 100);
+	this.minsLeft 	  += Math.floor(this.secsLeft / 60);
+	this.hoursLeft	  += Math.floor(this.minsLeft / 60);
+	this.daysLeft 	  += Math.floor(this.hoursLeft / 24);
+	this.monthsLeft	  += Math.floor(this.daysLeft / 30);
 
 	this.deciSecsLeft = this.deciSecsLeft % 100;
-	this.secsLeft = this.secsLeft % 60;
-	this.minsLeft = this.minsLeft % 60;
-	this.hoursLeft = this.hoursLeft % 24;
-	this.daysLeft = this.daysLeft % 30;
-	this.monthsLeft = Math.floor(this.daysLeft / 30);
+	this.secsLeft 		= this.secsLeft % 60;
+	this.minsLeft		  = this.minsLeft % 60;
+	this.hoursLeft	  = this.hoursLeft % 24;
+	this.daysLeft 		= this.daysLeft % 30;
+	this.monthsLeft	  = Math.floor(this.daysLeft / 30);
 };
 
 
 Counter.prototype.print = function() {
 	var deciseconds = pad(this.deciSecsLeft,2);
-	var seconds = pad(this.secsLeft,2);
-	var minutes = pad(this.minsLeft,2);
-	var hours = pad(this.hoursLeft,1);
-	var days = pad(this.daysLeft,1);
-	var months = pad(this.monthsLeft,1);
+	var seconds 		= pad(this.secsLeft,2);
+	var minutes 		= pad(this.minsLeft,2);
+	var hours 			= pad(this.hoursLeft,1);
+	var days 				= pad(this.daysLeft,1);
+	var months 			= pad(this.monthsLeft,1);
 
 	printString = "";
 
@@ -47,10 +51,7 @@ Counter.prototype.print = function() {
 	if (days > 0) {
 		printString += days + " days, ";
 	};
-	printString += hours + ":";
-	printString += minutes + ":";
-	printString += seconds + ":";
-	printString += deciseconds;
+	printString += [hours, minutes, seconds, deciseconds].join(":");
 	
 	return printString;
 };
@@ -66,26 +67,11 @@ var	formatDate = function(dateToFormat) {
 	var dayNum = dateToFormat.getDate() ;
 	var year = dateToFormat.getFullYear();
 
-	var th = (function() {
-			switch (dayNum % 10) {
-			case 1:
-				return "st";
-				break;
-			case 2:
-				return "nd";
-				break;
-			case 3:
-				return "rd";
-				break;
-			default:
-				return "th";
-			}
-		}());
+	var inflector = INFLECTORS[dayNum % 10] || INFLECTORS[0];
 
-	dayNum = dayNum + th;
-	var _sp = " ";
+	dayNum = dayNum + inflector; 
 
-	return dayName + _sp + month + _sp + dayNum + _sp + year
+	return [dayName, month, dayNum, year].join(" ")
 };
 
 var currentTime = function() {
@@ -93,75 +79,20 @@ var currentTime = function() {
 };
 
 var convertToDayName = function(dayNum) {
-	switch(dayNum) {
-		case 0:
-			return "Sunday";
-			break;
-		case 1:
-			return "Monday";
-			break;
-		case 2:
-			return "Tuesday";
-			break;
-		case 3:
-			return "Wednesday";
-			break;
-		case 4:
-			return "Thursday";
-			break;
-		case 5:
-			return "Friday";
-			break;
-		case 6:
-			return "Saturday";
-			break;
-		default:
-			return "Invalid Day"
-	}
-} ;
+	if (dayNum >= 0 && dayNum <= 6) {
+		return DAYS[dayNum];
+	};
+
+	return "Invalid Day";
+};
 
 var convertToMonthName = function(monthNum) {
-	switch(monthNum) {
-		case 0:
-			return "January";
-			break;
-		case 1:
-			return "February";
-			break;
-		case 2:
-			return "March";
-			break;
-		case 3:
-			return "April";
-			break;
-		case 4:
-			return "May";
-			break;
-		case 5:
-			return "June";
-			break;
-		case 6:
-			return "July";
-			break;
-		case 7:
-			return "August";
-			break;
-		case 8:
-			return "September";
-			break;
-		case 9:
-			return "October";
-			break;
-		case 10:
-			return "November";
-			break;
-		case 11:
-			return "December";
-			break;
-		default:
-			return "Invalid Month"
-	}
-} ;
+	if (monthNum >= 0 && monthNum <= 11) {
+		return MONTHS[monthNum];
+	};
+
+	return "Invalid Month";
+};
 
 var pad = function(input, numToPad) {
 	if (String(input).length >= numToPad) {
@@ -175,9 +106,9 @@ var pad = function(input, numToPad) {
 	}
 };
 
-c = new Counter();
-var d = function() {
-	document.write(c.print())
-	document.clear();
-}
+// c = new Counter();
+// var d = function() {
+// 	document.write(c.print())
+// 	document.clear();
+// }
 // window.setInterval(d,500);
