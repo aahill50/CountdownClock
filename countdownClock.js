@@ -31,7 +31,6 @@ Counter.prototype.convert = function() {
 	this.minsLeft		  = this.minsLeft % 60;
 	this.hoursLeft	  = this.hoursLeft % 24;
 	this.daysLeft 		= this.daysLeft % 30;
-	this.monthsLeft	  = Math.floor(this.daysLeft / 30);
 };
 
 
@@ -46,11 +45,29 @@ Counter.prototype.print = function() {
 	printString = "";
 
 	if (months > 0) {
-		printString += months + " months, ";
+		var monthWord = (function() {
+			if (months > 1) {
+				return "months";
+			} else {
+				return "month";
+			};
+		}());
+
+		printString += [months, monthWord].join(" ") + ", ";
 	};
+
 	if (days > 0) {
-		printString += days + " days, ";
+		var dayWord = (function() {
+			if (days > 1) {
+				return "days";
+			} else {
+				return "day";
+			};
+		}());
+		
+		printString += [days, dayWord].join(" ") + ", ";
 	};
+
 	printString += [hours, minutes, seconds, deciseconds].join(":");
 	
 	return printString;
